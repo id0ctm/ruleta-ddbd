@@ -118,7 +118,8 @@ function cargarPerksPredefinidas() {
     });
 }
 
-//🔹 INICIA LA RULETAfunction iniciarRuletaAleatoria() {
+//🔹 INICIA LA RULETA
+function iniciarRuletaAleatoria() {
     document.getElementById('mosaico').classList.add('ruleta-activa');
     reproducirMusica();
     risaAudio.currentTime = 0;
