@@ -8,7 +8,7 @@ const MIS_KILLERS = [
     "pig","clown","spirit","legion","plague",
     "ghostface","demogorgon","oni","deathslinger",
     "executioner","blight","twins","trickster",
-    "nemesis","cenobite","artist","onryo",
+    "nemesis","artist","onryo",
     "dredge","mastermind","knight","springtrap",
     "chucky","dracula","unknown","ghoul"
 ];
