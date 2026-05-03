@@ -140,7 +140,7 @@ function iniciarRuletaAleatoria() {
 
     const inicio = Date.now();
     let ultimaCardIdx = -1;
-    let retraso = 50; // Velocidad inicial rápida
+    let retraso = 120; // Velocidad inicial rápida
 
     // 3. Función de animación recursiva
     function animar() {
