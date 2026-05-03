@@ -138,7 +138,7 @@ function iniciarRuletaAleatoria() {
     const inicio = Date.now();
     let ultimaCardIdx = -1;
     
-    // 🛡️ VELOCIDAD INICIAL CONTROLADA
+    // 🚀 INICIO ULTRA RÁPIDO (Tu ajuste de 10)
     let retraso = 10; 
 
     function animarConTension() {
@@ -159,36 +159,56 @@ function iniciarRuletaAleatoria() {
 
         let transcurrido = Date.now() - inicio;
 
-        // 📈 FRENO DINÁMICO
+        // 📈 FRENO PROGRESIVO
         if (transcurrido > tiempoTotalMinimo * 0.6) {
-            retraso *= 1.35; // Frenado más notable
+            retraso *= 1.15; 
         }
 
-        // Condición de parada: tiempo cumplido Y el último salto es lento (900ms)
+        // Condición de parada para el bucle principal (cuando llega a 900ms de lentitud)
         if (transcurrido < tiempoTotalMinimo || retraso < 900) {
             setTimeout(animarConTension, retraso);
         } else {
+            // 🎭 EL TOQUE FINAL DE SUSPENSO (EL ENGAÑO)
+            // Se queda "congelado" en la penúltima carta por 1.2 segundos
             setTimeout(() => {
-                if (seleccionadas.has(nuevoIdx)) {
-                    seleccionadas.delete(nuevoIdx);
+                
+                // Quitamos el brillo de la carta donde parecía que iba a quedar
+                if (!seleccionadas.has(nuevoIdx)) {
                     cards[nuevoIdx].classList.remove('activa');
-                } else {
-                    seleccionadas.add(nuevoIdx);
-                    cards[nuevoIdx].classList.add('activa');
                 }
-                finalizarRuleta(nuevoIdx);
-                document.getElementById('mosaico').classList.remove('ruleta-activa');
-                risaAudio.pause();
-                risaAudio.currentTime = 0;
-                playSuccessSound();
-                btn.disabled = false;
-            }, retraso);
+
+                // Hacemos el SALTO FINAL inesperado
+                let idxFinal;
+                do { 
+                    idxFinal = Math.floor(Math.random() * cards.length); 
+                } while (idxFinal === nuevoIdx);
+
+                cards[idxFinal].classList.add('activa');
+                playTickSound(); // Último sonido de confirmación
+
+                // Pausa de medio segundo antes de procesar el resultado definitivo
+                setTimeout(() => {
+                    if (seleccionadas.has(idxFinal)) {
+                        seleccionadas.delete(idxFinal);
+                        cards[idxFinal].classList.remove('activa');
+                    } else {
+                        seleccionadas.add(idxFinal);
+                        cards[idxFinal].classList.add('activa');
+                    }
+
+                    finalizarRuleta(idxFinal);
+                    document.getElementById('mosaico').classList.remove('ruleta-activa');
+                    risaAudio.pause();
+                    risaAudio.currentTime = 0;
+                    playSuccessSound();
+                    btn.disabled = false;
+                }, 500);
+
+            }, 1200); // ⏱️ Duración del "engaño" antes del último salto
         }
     }
-    // Llamamos al nuevo nombre de la función
     animarConTension();
 }
-
 // 🔹 RESTO IGUAL
 function finalizarRuleta(idx) {
     const nombre = listaMezclada[idx];
