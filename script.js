@@ -139,7 +139,7 @@ function iniciarRuletaAleatoria() {
     let ultimaCardIdx = -1;
     
     // 🛡️ VELOCIDAD INICIAL CONTROLADA
-    let retraso = 100; 
+    let retraso = 10; 
 
     function animarConTension() {
         if (ultimaCardIdx !== -1) {
