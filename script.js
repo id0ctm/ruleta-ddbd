@@ -139,10 +139,8 @@ function iniciarRuletaAleatoria() {
     let ultimaCardIdx = -1;
     
     // 🛡️ VELOCIDAD INICIAL CONTROLADA
-    // Prueba con 300 para que el inicio sea claramente pausado.
-    let retraso = 300; 
+    let retraso = 100; 
 
-    // Cambiamos el nombre aquí para evitar conflictos de caché
     function animarConTension() {
         if (ultimaCardIdx !== -1) {
             if (!seleccionadas.has(ultimaCardIdx)) {
