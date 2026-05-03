@@ -28,7 +28,7 @@ if (volumenSlider) {
     volumenSlider.addEventListener('input', (e) => {
         const vol = e.target.value;
         if (musicaFondo) musicaFondo.volume = vol;
-        risaAudio.volume = vol * 0.5;
+        risaAudio.volume = vol * 0.2;
     });
 }
 
@@ -38,7 +38,7 @@ const musicaFondo = document.getElementById('musicaFondo');
 function reproducirMusica() {
     if (musicaFondo && musicaFondo.paused) {
         musicaFondo.loop = true; // 🔁 Esto asegura que siga sonando siempre
-        musicaFondo.volume = 0.05;
+        musicaFondo.volume = 0.02;
         musicaFondo.play().catch(error => {
             console.log("Bloqueo de audio:", error);
         });
@@ -47,7 +47,7 @@ function reproducirMusica() {
 
 const risaAudio = new Audio('risa.mp3');
 risaAudio.loop = false;
-risaAudio.volume = 0.05;
+risaAudio.volume = 0.02;
 
 // 🔹 PERKS ORIGINALES
 const MIS_PERKS = [
