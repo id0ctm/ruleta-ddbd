@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta de Perks DBD</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="cargarPerksPredefinidas()">
+
+<div class="titulo-container">
+    <img src="logo.png" alt="logo" class="logo-titulo">
+    <h1>Ruleta DBD</h1>
+</div>
+
+<!-- 🔹 NUEVO: selector -->
+<div style="margin-bottom: 20px;">
+    <button onclick="cambiarModo('survivor')">SURVI</button>
+    <button onclick="cambiarModo('killer')">KILLER</button>
+</div>
+
+<div class="controles">
+    <div class="input-group">
+        <label>Segundos:</label>
+        <input type="number" id="inputTiempo" value="4" min="1" max="60">
+    </div>
+
+    <div class="input-group">
+        <label>Volumen:</label>
+        <input type="range" id="volumenControl" min="0" max="1" step="0.01" value="0.1">
+    </div>
+
+    <button id="btnGirar" onclick="iniciarRuletaAleatoria()">GIRAR RULETA</button>
+    <button id="btnReiniciar" onclick="reiniciarBuild()" style="background: #333;">REINICIAR</button>
+    <button onclick="mezclarPerks()" style="background: #444;">MEZCLAR</button>
+</div>
+
+<div id="mosaico" class="mosaico"></div>
+
+<div id="resultado" class="resultado-oculto">
+    <h2 id="nombreGanador"></h2>
+    <div id="contenedorImagenGanadora"></div>
+    <button class="btn-cerrar" onclick="cerrarResultado()">CERRAR</button>
+</div>
+
+<audio id="musicaFondo" src="musica.mp3" loop preload="auto"></audio>
+<script src="script.js"></script>
+
+</body>
+</html>
