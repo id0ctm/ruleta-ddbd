@@ -118,12 +118,9 @@ function cargarPerksPredefinidas() {
     });
 }
 
-// 🔹 RULETA (TUYA + FIX)
 function iniciarRuletaAleatoria() {
-    document.getElementById('mosaico').classList.add('ruleta-activa'); // 👈 FIX hover
-
+    document.getElementById('mosaico').classList.add('ruleta-activa');
     reproducirMusica();
-
     risaAudio.currentTime = 0;
     risaAudio.play();
 
@@ -131,25 +128,26 @@ function iniciarRuletaAleatoria() {
     
     const cards = document.querySelectorAll('.perk-card');
     const btn = document.getElementById('btnGirar');
-    const tiempoTotal = document.getElementById('inputTiempo').value * 1000; 
+    const tiempoTotalMinimo = document.getElementById('inputTiempo').value * 1000; 
     
     document.getElementById('resultado').className = 'resultado-oculto';
     btn.disabled = true;
 
     const inicio = Date.now();
     let ultimaCardIdx = -1;
+    let retraso = 50; // ⏱️ Velocidad inicial (muy rápida)
 
     function animar() {
-	if (ultimaCardIdx !== -1) {
-    // Solo quitamos el highlight temporal,
-    // pero NO tocamos las que ya estaban seleccionadas
-           if (!seleccionadas.has(ultimaCardIdx)) {
-               cards[ultimaCardIdx].classList.remove('activa');
-           }
+        if (ultimaCardIdx !== -1) {
+            if (!seleccionadas.has(ultimaCardIdx)) {
+                cards[ultimaCardIdx].classList.remove('activa');
+            }
         }
 
         let nuevoIdx;
-        do { nuevoIdx = Math.floor(Math.random() * cards.length); } while (nuevoIdx === ultimaCardIdx);
+        do { 
+            nuevoIdx = Math.floor(Math.random() * cards.length); 
+        } while (nuevoIdx === ultimaCardIdx);
 
         cards[nuevoIdx].classList.add('activa');
         playTickSound();
@@ -157,33 +155,39 @@ function iniciarRuletaAleatoria() {
 
         let transcurrido = Date.now() - inicio;
 
-        if (transcurrido < tiempoTotal) {
-            setTimeout(animar, 100);
+        // 📈 LÓGICA DE TENSIÓN:
+        // Si ya pasó más de la mitad del tiempo, empezamos a aumentar el retraso
+        if (transcurrido > tiempoTotalMinimo * 0.6) {
+            retraso *= 1.15; // Cada salto es un 15% más lento que el anterior
+        }
+
+        // Condición de parada: tiempo cumplido Y velocidad muy lenta
+        if (transcurrido < tiempoTotalMinimo || retraso < 600) {
+            setTimeout(animar, retraso);
         } else {
+            // Finalización con el último retraso largo para el "efecto engaño"
             setTimeout(() => {
-	       if (seleccionadas.has(nuevoIdx)) {
-	           seleccionadas.delete(nuevoIdx);
-	           cards[nuevoIdx].classList.remove('activa');
-	       } else {
-   	           seleccionadas.add(nuevoIdx);
-   	           cards[nuevoIdx].classList.add('activa');
-               }
+                if (seleccionadas.has(nuevoIdx)) {
+                    seleccionadas.delete(nuevoIdx);
+                    cards[nuevoIdx].classList.remove('activa');
+                } else {
+                    seleccionadas.add(nuevoIdx);
+                    cards[nuevoIdx].classList.add('activa');
+                }
 
-		finalizarRuleta(nuevoIdx);
+                finalizarRuleta(nuevoIdx);
                 document.getElementById('mosaico').classList.remove('ruleta-activa');
-
+                
                 risaAudio.pause();
                 risaAudio.currentTime = 0;
 
                 playSuccessSound();
                 btn.disabled = false;
-
-            }, 400);
+            }, retraso);
         }
     }
     animar();
 }
-
 // 🔹 RESTO IGUAL
 function finalizarRuleta(idx) {
     const nombre = listaMezclada[idx];
