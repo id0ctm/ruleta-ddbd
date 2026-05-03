@@ -138,11 +138,12 @@ function iniciarRuletaAleatoria() {
     const inicio = Date.now();
     let ultimaCardIdx = -1;
     
-    // 🛡️ CONTROL DE VELOCIDAD INICIAL
-    // Prueba con 200 para algo fluido o 500 para algo muy lento.
-    let retraso = 200; 
+    // 🛡️ VELOCIDAD INICIAL CONTROLADA
+    // Prueba con 300 para que el inicio sea claramente pausado.
+    let retraso = 300; 
 
-    function animar() {
+    // Cambiamos el nombre aquí para evitar conflictos de caché
+    function animarConTension() {
         if (ultimaCardIdx !== -1) {
             if (!seleccionadas.has(ultimaCardIdx)) {
                 cards[ultimaCardIdx].classList.remove('activa');
@@ -161,13 +162,13 @@ function iniciarRuletaAleatoria() {
         let transcurrido = Date.now() - inicio;
 
         // 📈 FRENO DINÁMICO
-        if (transcurrido > tiempoTotalMinimo * 0.7) {
-            retraso *= 1.3; // Frenado agresivo
+        if (transcurrido > tiempoTotalMinimo * 0.6) {
+            retraso *= 1.35; // Frenado más notable
         }
 
-        // Condición de parada
+        // Condición de parada: tiempo cumplido Y el último salto es lento (900ms)
         if (transcurrido < tiempoTotalMinimo || retraso < 900) {
-            setTimeout(animar, retraso);
+            setTimeout(animarConTension, retraso);
         } else {
             setTimeout(() => {
                 if (seleccionadas.has(nuevoIdx)) {
@@ -186,7 +187,8 @@ function iniciarRuletaAleatoria() {
             }, retraso);
         }
     }
-    animar();
+    // Llamamos al nuevo nombre de la función
+    animarConTension();
 }
 
 // 🔹 RESTO IGUAL
