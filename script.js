@@ -140,7 +140,7 @@ function iniciarRuletaAleatoria() {
     
     // 🛡️ VELOCIDAD INICIAL CONTROLADA
     // Prueba con 300 para que el inicio sea claramente pausado.
-    let retraso = 10; 
+    let retraso = 300; 
 
     // Cambiamos el nombre aquí para evitar conflictos de caché
     function animarConTension() {
