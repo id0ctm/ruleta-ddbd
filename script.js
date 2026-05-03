@@ -120,7 +120,6 @@ function cargarPerksPredefinidas() {
 
 //🔹 INICIA LA RULETA
 function iniciarRuletaAleatoria() {
-    // 1. Preparación visual y de audio
     document.getElementById('mosaico').classList.add('ruleta-activa');
     reproducirMusica();
     risaAudio.currentTime = 0;
@@ -130,8 +129,6 @@ function iniciarRuletaAleatoria() {
     
     const cards = document.querySelectorAll('.perk-card');
     const btn = document.getElementById('btnGirar');
-    
-    // 2. Validación de tiempo (Seguridad)
     let tiempoInput = parseFloat(document.getElementById('inputTiempo').value);
     const tiempoTotalMinimo = (isNaN(tiempoInput) || tiempoInput <= 0 ? 3 : tiempoInput) * 1000; 
     
@@ -140,18 +137,18 @@ function iniciarRuletaAleatoria() {
 
     const inicio = Date.now();
     let ultimaCardIdx = -1;
-    let retraso = 1000; // Velocidad inicial rápida
+    
+    // 🛡️ CONTROL DE VELOCIDAD INICIAL
+    // Prueba con 200 para algo fluido o 500 para algo muy lento.
+    let retraso = 200; 
 
-    // 3. Función de animación recursiva
     function animar() {
-        // Limpiar estado visual anterior
         if (ultimaCardIdx !== -1) {
             if (!seleccionadas.has(ultimaCardIdx)) {
                 cards[ultimaCardIdx].classList.remove('activa');
             }
         }
 
-        // Selección aleatoria sin repetir la misma carta consecutivamente
         let nuevoIdx;
         do { 
             nuevoIdx = Math.floor(Math.random() * cards.length); 
@@ -163,21 +160,16 @@ function iniciarRuletaAleatoria() {
 
         let transcurrido = Date.now() - inicio;
 
-        // --- LÓGICA DE TENSIÓN (EL FRENO) ---
-        // Empezamos a multiplicar el retraso progresivamente al llegar al 70% del tiempo
+        // 📈 FRENO DINÁMICO
         if (transcurrido > tiempoTotalMinimo * 0.7) {
-            retraso *= 1.25; // Aumenta el tiempo entre saltos un 25% cada vez
+            retraso *= 1.3; // Frenado agresivo
         }
 
-        // Condición de continuación:
-        // Seguimos si no ha pasado el tiempo O si todavía la ruleta va "rápida" (menos de 800ms)
-        if (transcurrido < tiempoTotalMinimo || retraso < 800) {
+        // Condición de parada
+        if (transcurrido < tiempoTotalMinimo || retraso < 900) {
             setTimeout(animar, retraso);
         } else {
-            // --- FINALIZACIÓN (EL ENGAÑO) ---
-            // Este último timeout largo es el que da la sensación de "por poco"
             setTimeout(() => {
-                // Lógica para marcar/desmarcar la carta ganadora
                 if (seleccionadas.has(nuevoIdx)) {
                     seleccionadas.delete(nuevoIdx);
                     cards[nuevoIdx].classList.remove('activa');
@@ -185,20 +177,15 @@ function iniciarRuletaAleatoria() {
                     seleccionadas.add(nuevoIdx);
                     cards[nuevoIdx].classList.add('activa');
                 }
-
                 finalizarRuleta(nuevoIdx);
                 document.getElementById('mosaico').classList.remove('ruleta-activa');
-                
                 risaAudio.pause();
                 risaAudio.currentTime = 0;
-
                 playSuccessSound();
                 btn.disabled = false;
-            }, retraso); 
+            }, retraso);
         }
     }
-
-    // Arrancar la animación
     animar();
 }
 
