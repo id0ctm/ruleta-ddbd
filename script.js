@@ -118,9 +118,12 @@ function cargarPerksPredefinidas() {
     });
 }
 
+//🔹 INICIA LA RULETA
 function iniciarRuletaAleatoria() {
     document.getElementById('mosaico').classList.add('ruleta-activa');
+
     reproducirMusica();
+
     risaAudio.currentTime = 0;
     risaAudio.play();
 
@@ -128,6 +131,7 @@ function iniciarRuletaAleatoria() {
     
     const cards = document.querySelectorAll('.perk-card');
     const btn = document.getElementById('btnGirar');
+    // Multiplicamos por 1000 para convertir segundos a milisegundos
     const tiempoTotalMinimo = document.getElementById('inputTiempo').value * 1000; 
     
     document.getElementById('resultado').className = 'resultado-oculto';
@@ -135,15 +139,17 @@ function iniciarRuletaAleatoria() {
 
     const inicio = Date.now();
     let ultimaCardIdx = -1;
-    let retraso = 50; // ⏱️ Velocidad inicial (muy rápida)
+    let retraso = 50; // Velocidad inicial (muy rápida)
 
     function animar() {
+        // Limpiamos la carta anterior
         if (ultimaCardIdx !== -1) {
             if (!seleccionadas.has(ultimaCardIdx)) {
                 cards[ultimaCardIdx].classList.remove('activa');
             }
         }
 
+        // Elegimos una nueva carta al azar
         let nuevoIdx;
         do { 
             nuevoIdx = Math.floor(Math.random() * cards.length); 
@@ -155,18 +161,20 @@ function iniciarRuletaAleatoria() {
 
         let transcurrido = Date.now() - inicio;
 
-        // 📈 LÓGICA DE TENSIÓN:
-        // Si ya pasó más de la mitad del tiempo, empezamos a aumentar el retraso
+        // 📈 EFECTO DE TENSIÓN:
+        // Si ya pasó el 60% del tiempo total, empezamos a frenar
         if (transcurrido > tiempoTotalMinimo * 0.6) {
-            retraso *= 1.15; // Cada salto es un 15% más lento que el anterior
+            retraso *= 1.2; // Aumenta el tiempo entre saltos un 20% cada vez
         }
 
-        // Condición de parada: tiempo cumplido Y velocidad muy lenta
+        // Condición de parada: 
+        // Que haya pasado el tiempo mínimo Y que el retraso sea lento (mínimo 600ms)
         if (transcurrido < tiempoTotalMinimo || retraso < 600) {
             setTimeout(animar, retraso);
         } else {
-            // Finalización con el último retraso largo para el "efecto engaño"
+            // EL MOMENTO FINAL (El engaño)
             setTimeout(() => {
+                // Lógica de selección visual
                 if (seleccionadas.has(nuevoIdx)) {
                     seleccionadas.delete(nuevoIdx);
                     cards[nuevoIdx].classList.remove('activa');
@@ -177,17 +185,19 @@ function iniciarRuletaAleatoria() {
 
                 finalizarRuleta(nuevoIdx);
                 document.getElementById('mosaico').classList.remove('ruleta-activa');
-                
+
                 risaAudio.pause();
                 risaAudio.currentTime = 0;
 
                 playSuccessSound();
                 btn.disabled = false;
-            }, retraso);
+
+            }, retraso); // Espera el último retraso largo antes de mostrar el resultado
         }
     }
     animar();
 }
+
 // 🔹 RESTO IGUAL
 function finalizarRuleta(idx) {
     const nombre = listaMezclada[idx];
