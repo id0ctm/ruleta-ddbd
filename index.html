@@ -9,20 +9,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body> <!-- 🚀 CAMBIO 1: Quitamos el onload de aquí, ya lo maneja el script.js -->
+<body onload="cargarPerksPredefinidas()">
 
 <div class="titulo-container">
     <img src="logo.png" alt="logo" class="logo-titulo">
     <h1>Ruleta DBD</h1>
 </div>
 
-<div class="controles">
-    <!-- 🚀 CAMBIO 2: Metimos los botones SURVI y KILLER dentro de la barra de controles para ahorrar espacio vertical -->
-    <div class="modo-selector">
-        <button onclick="cambiarModo('survivor')" style="background: #111; padding: 6px 15px; font-size: 11px;">SURVI</button>
-        <button onclick="cambiarModo('killer')" style="background: #111; padding: 6px 15px; font-size: 11px;">KILLER</button>
-    </div>
+<!-- 🔹 NUEVO: selector -->
+<div style="margin-bottom: 20px;">
+    <button onclick="cambiarModo('survivor')">SURVI</button>
+    <button onclick="cambiarModo('killer')">KILLER</button>
+</div>
 
+<div class="controles">
     <div class="input-group">
         <label>Segundos:</label>
         <input type="number" id="inputTiempo" value="4" min="1" max="60">
