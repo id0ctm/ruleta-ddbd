@@ -45,7 +45,7 @@ const TRADUCCION_PERKS = {
     "oportunidades": "Oportunidades",
     "pasion": "Pasión",
     "resiliencia": "Resiliencia",
-    "resurgimiento", "Resurgimiento",
+    "resurgimiento": "Resurgimiento", // 👈 ¡CORREGIDO AQUÍ! Tenía una coma en vez de dos puntos
     "serenidad": "Serenidad",
     "tenacidad": "Tenacidad",
     "viarapida": "Vía Rápida",
@@ -102,7 +102,7 @@ const MIS_KILLERS = [
     "chucky","dracula","unknown","ghoul"
 ];
 
-// 🔹 PERKS ORIGINALES
+// 🔹 PERKS
 const MIS_PERKS = [
     "tenacidad", "resiliencia", "caidaequilibrada", "fajador", "adrenalina", 
     "cuesteloquecueste", "dejavu", "distraccion", "oportunidades", "granadaaturdidora", 
@@ -186,7 +186,7 @@ function playSuccessSound() {
 
 // 🔹 CARGAR PERKS PREDEFINIDAS
 function cargarPerksPredefinidas() {
-    const contenedor = document.getElementById('mosaico');
+    const contenedor = document.getElementById('mosaico') || document.querySelector('.mosaico');
     if(!contenedor) return;
 
     contenedor.innerHTML = ''; 
@@ -203,7 +203,6 @@ function cargarPerksPredefinidas() {
         div.id = `perk-${index}`;
         div.style.backgroundImage = `url('${carpeta}/${nombre}.png')`;
         
-        // Muestra el nombre bonito en el dataset (para tooltips si usas)
         const nombreBonito = diccionario[nombre] || nombre;
         div.dataset.nombre = nombreBonito;
         
@@ -213,7 +212,9 @@ function cargarPerksPredefinidas() {
 
 // 🔹 INICIA LA RULETA
 function iniciarRuletaAleatoria() {
-    document.getElementById('mosaico').classList.add('ruleta-activa');
+    const contenedorMosaico = document.getElementById('mosaico') || document.querySelector('.mosaico');
+    if(contenedorMosaico) contenedorMosaico.classList.add('ruleta-activa');
+    
     reproducirMusica();
     risaAudio.currentTime = 0;
     risaAudio.play();
@@ -280,7 +281,10 @@ function iniciarRuletaAleatoria() {
                     }
 
                     finalizarRuleta(idxFinal);
-                    document.getElementById('mosaico').classList.remove('ruleta-activa');
+                    
+                    const contenedorMosaicoFin = document.getElementById('mosaico') || document.querySelector('.mosaico');
+                    if(contenedorMosaicoFin) contenedorMosaicoFin.classList.remove('ruleta-activa');
+                    
                     risaAudio.pause();
                     risaAudio.currentTime = 0;
                     playSuccessSound();
@@ -293,13 +297,12 @@ function iniciarRuletaAleatoria() {
     animarConTension();
 }
 
-// 🔹 FINALIZAR RULETA (Con nombres formateados)
+// 🔹 FINALIZAR RULETA
 function finalizarRuleta(idx) {
     const nombreOriginal = listaMezclada[idx];
     const carpeta = modoActual === "survivor" ? "perks" : "killers";
     const diccionario = modoActual === "survivor" ? TRADUCCION_PERKS : TRADUCCION_KILLERS;
 
-    // Buscar traducción limpia o usar la original si no existe
     const nombreMostrar = diccionario[nombreOriginal] || nombreOriginal;
 
     document.getElementById('nombreGanador').innerText = nombreMostrar.toUpperCase();
@@ -352,3 +355,11 @@ function ruletaCantidadPerksKiller() {
 
     setTimeout(() => {
         resultadoDiv.className = 'resultado-visible';
+        animar();
+    }, 800);
+}
+
+// 🔹 EJECUCIÓN INICIAL AL CARGAR LA PÁGINA
+window.onload = function() {
+    cargarPerksPredefinidas();
+};
