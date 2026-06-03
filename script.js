@@ -63,6 +63,41 @@ const MIS_PERKS = [
     "estadodeflujo", "ultimoenfrentamiento"
 ];
 
+// 🔹 DICCIONARIO DE NOMBRES BONITOS
+const TRADUCCION_PERKS = {
+    "ultimoenfrentamiento": "Último Enfrentamiento",
+    "caidaequilibrada": "Caída Equilibrada",
+    "demuestraloquevales": "Demuestra lo que Vales",
+    "cuesteloquecueste": "Cueste lo que Cueste",
+    "granadaaturdidora": "Granada Aturdidora",
+    "voluntaddehierro": "Voluntad de Hierro",
+    "postratamiento": "Postratamiento",
+    "velocidadsilenciosa": "Velocidad Silenciosa",
+    "minaexplosiva": "Mina Explosiva",
+    "giroargumental": "Giro Argumental",
+    "construccionduradera": "Construcción Duradera",
+    "exitoarrollador": "Éxito Arrollador",
+    "sistemadeespionaje": "Sistema de Espionaje",
+    "instintodesaqueador": "Instinto de Saqueador",
+    "autopreservacion": "Autopreservación",
+    "conexionempatica": "Conexión Empática",
+    "escalofrios": "Escalofríos",
+    "liberacion": "Liberación",
+    "luchadepoderes", "Lucha de Poderes",
+    "cincopasosadelante": "Cinco Pasos Adelante",
+    "estadodeflujo": "Estado de Flujo"
+    // Puedes seguir agregando las demás aquí...
+};
+
+const TRADUCCION_KILLERS = {
+    "ghostface": "Ghost Face",
+    "deathslinger": "Deathslinger",
+    "executioner": "The Executioner",
+    "mastermind": "The Mastermind",
+    "theunknown": "The Unknown"
+    // Agrega los que quieras separar o poner en mayúsculas
+};
+
 let listaMezclada = [];
 let seleccionadas = new Set(); 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -114,7 +149,8 @@ function cargarPerksPredefinidas() {
         div.className = 'perk-card';
         div.id = `perk-${index}`;
         div.style.backgroundImage = `url('${carpeta}/${nombre}.png')`;
-        div.dataset.nombre = nombre.replace(/([A-Z])/g, ' $1').trim();
+        const diccionario = modoActual === "survivor" ? TRADUCCION_PERKS : TRADUCCION_KILLERS;
+        div.dataset.nombre = diccionario[nombre] || nombre;
         contenedor.appendChild(div);
     });
 }
@@ -210,16 +246,29 @@ function iniciarRuletaAleatoria() {
     }
     animarConTension();
 }
-// 🔹 RESTO IGUAL
-function finalizarRuleta(idx) {
-    const nombre = listaMezclada[idx];
-    const carpeta = modoActual === "survivor" ? "perks" : "killers";
 
-    document.getElementById('nombreGanador').innerText = nombre.toUpperCase();
+// 🔹 FINALIZAR RULETA (Modificada para mostrar nombres con espacios)
+function finalizarRuleta(idx) {
+    const nombreOriginal = listaMezclada[idx];
+    const carpeta = modoActual === "survivor" ? "perks" : "killers";
+    
+    // 1. Buscamos si el nombre existe en nuestros diccionarios
+    let nombreMostrar;
+    if (modoActual === "survivor") {
+        nombreMostrar = TRADUCCION_PERKS[nombreOriginal] || nombreOriginal;
+    } else {
+        nombreMostrar = TRADUCCION_KILLERS[nombreOriginal] || nombreOriginal;
+    }
+
+    // 2. Lo mostramos en pantalla (se pasa a MAYÚSCULAS automáticamente)
+    document.getElementById('nombreGanador').innerText = nombreMostrar.toUpperCase();
+    
+    // 3. La imagen sigue usando el nombre original sin espacios para que no se rompa la ruta
     document.getElementById('contenedorImagenGanadora').style.backgroundImage =
-        `url('${carpeta}/${nombre}.png')`;
+        `url('${carpeta}/${nombreOriginal}.png')`;
 
     document.getElementById('resultado').className = 'resultado-visible';
+    
     // 🔽 SOLO PARA KILLER
     if (modoActual === "killer") {
         ruletaCantidadPerksKiller();
