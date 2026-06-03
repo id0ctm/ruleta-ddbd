@@ -59,7 +59,8 @@ const MIS_PERKS = [
     "inquebrantable", "construccionduradera", "dramaturgia", "exitoarrollador", "agilidad", 
     "engaño", "resurgimiento", "despierta", "viarapida", "sistemadeespionaje", 
     "vigilia", "instintodesaqueador", "autopreservacion", "camaraderia", "conexionempatica", 
-    "escalofrios", "liberacion", "luchadepoderes", "nosvemos", "pasion", "elegancia", "cincopasosadelante", "estadodeflujo"
+    "escalofrios", "liberacion", "luchadepoderes", "nosvemos", "pasion", "elegancia", "cincopasosadelante",
+    "estadodeflujo", "ultimoenfrentamiento"
 ];
 
 let listaMezclada = [];
