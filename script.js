@@ -45,7 +45,7 @@ const TRADUCCION_PERKS = {
     "oportunidades": "Oportunidades",
     "pasion": "Pasión",
     "resiliencia": "Resiliencia",
-    "resurgimiento", "Resurgimiento",
+    "resurgimiento": "Resurgimiento",
     "serenidad": "Serenidad",
     "tenacidad": "Tenacidad",
     "viarapida": "Vía Rápida",
