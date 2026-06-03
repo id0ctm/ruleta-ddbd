@@ -63,7 +63,7 @@ const MIS_PERKS = [
     "estadodeflujo", "ultimoenfrentamiento"
 ];
 
-// 🔹 DICCIONARIO DE NOMBRES BONITOS
+// 🔹 DICCIONARIO DE NOMBRES BONITOS (Corregido)
 const TRADUCCION_PERKS = {
     "ultimoenfrentamiento": "Último Enfrentamiento",
     "caidaequilibrada": "Caída Equilibrada",
@@ -83,10 +83,9 @@ const TRADUCCION_PERKS = {
     "conexionempatica": "Conexión Empática",
     "escalofrios": "Escalofríos",
     "liberacion": "Liberación",
-    "luchadepoderes", "Lucha de Poderes",
+    "luchadepoderes": "Lucha de Poderes",
     "cincopasosadelante": "Cinco Pasos Adelante",
     "estadodeflujo": "Estado de Flujo"
-    // Puedes seguir agregando las demás aquí...
 };
 
 const TRADUCCION_KILLERS = {
@@ -95,7 +94,6 @@ const TRADUCCION_KILLERS = {
     "executioner": "The Executioner",
     "mastermind": "The Mastermind",
     "theunknown": "The Unknown"
-    // Agrega los que quieras separar o poner en mayúsculas
 };
 
 let listaMezclada = [];
@@ -249,10 +247,10 @@ function iniciarRuletaAleatoria() {
 
 // 🔹 FINALIZAR RULETA (Modificada para mostrar nombres con espacios)
 function finalizarRuleta(idx) {
-    const nombreOriginal = listaMezclada[idx];
+    const nombreOriginal = listaMezclada[idx]; // Ej: "ultimoenfrentamiento"
     const carpeta = modoActual === "survivor" ? "perks" : "killers";
-    
-    // 1. Buscamos si el nombre existe en nuestros diccionarios
+
+    // Buscar en el diccionario
     let nombreMostrar;
     if (modoActual === "survivor") {
         nombreMostrar = TRADUCCION_PERKS[nombreOriginal] || nombreOriginal;
@@ -260,16 +258,15 @@ function finalizarRuleta(idx) {
         nombreMostrar = TRADUCCION_KILLERS[nombreOriginal] || nombreOriginal;
     }
 
-    // 2. Lo mostramos en pantalla (se pasa a MAYÚSCULAS automáticamente)
+    // Mostrar el nombre modificado con espacios en la pantalla
     document.getElementById('nombreGanador').innerText = nombreMostrar.toUpperCase();
-    
-    // 3. La imagen sigue usando el nombre original sin espacios para que no se rompa la ruta
+
+    // La imagen DEBE seguir usando el nombre original (pegado) para que la ruta funcione
     document.getElementById('contenedorImagenGanadora').style.backgroundImage =
         `url('${carpeta}/${nombreOriginal}.png')`;
 
     document.getElementById('resultado').className = 'resultado-visible';
-    
-    // 🔽 SOLO PARA KILLER
+
     if (modoActual === "killer") {
         ruletaCantidadPerksKiller();
     }
