@@ -1,6 +1,95 @@
 // 🔹 MODO
 let modoActual = "survivor";
 
+// 🔹 DICCIONARIOS DE TRADUCCIÓN (Nombres con espacios y tildes)
+const TRADUCCION_PERKS = {
+    "ultimoenfrentamiento": "Último Enfrentamiento",
+    "caidaequilibrada": "Caída Equilibrada",
+    "demuestraloquevales": "Demuestra lo que Vales",
+    "cuesteloquecueste": "Cueste lo que Cueste",
+    "granadaaturdidora": "Granada Aturdidora",
+    "voluntaddehierro": "Voluntad de Hierro",
+    "postratamiento": "Postratamiento",
+    "velocidadsilenciosa": "Velocidad Silenciosa",
+    "minaexplosiva": "Mina Explosiva",
+    "giroargumental": "Giro Argumental",
+    "construccionduradera": "Construcción Duradera",
+    "exitoarrollador": "Éxito Arrollador",
+    "sistemadeespionaje": "Sistema de Espionaje",
+    "instintodesaqueador": "Instinto de Saqueador",
+    "autopreservacion": "Autopreservación",
+    "conexionempatica": "Conexión Empática",
+    "escalofrios": "Escalofríos",
+    "liberacion": "Liberación",
+    "luchadepoderes": "Lucha de Poderes",
+    "cincopasosadelante": "Cinco Pasos Adelante",
+    "estadodeflujo": "Estado de Flujo",
+    "adrenalina": "Adrenalina",
+    "agilidad": "Agilidad",
+    "alerta": "Alerta",
+    "autodidacta": "Autodidacta",
+    "bailaconmigo": "Baila Conmigo",
+    "camaraderia": "Camaradería",
+    "dejavu": "Deja Vu",
+    "distraccion": "Distracción",
+    "dramaturgia": "Dramaturgia",
+    "elegancia": "Elegancia",
+    "engaño": "Engaño",
+    "fajador": "Fajador",
+    "fijacion": "Fijación",
+    "fuerzainterior": "Fuerza Interior",
+    "defrente": "De Frente",
+    "golpedecisivo": "Golpe Decisivo",
+    "inquebrantable": "Inquebrantable",
+    "nosvemos": "Nos Vemos",
+    "oportunidades": "Oportunidades",
+    "pasion": "Pasión",
+    "resiliencia": "Resiliencia",
+    "resurgimiento", "Resurgimiento",
+    "serenidad": "Serenidad",
+    "tenacidad": "Tenacidad",
+    "viarapida": "Vía Rápida",
+    "vigilia": "Vigilia",
+    "despierta": "Despierta"
+};
+
+const TRADUCCION_KILLERS = {
+    "ghostface": "Ghost Face",
+    "deathslinger": "Deathslinger",
+    "executioner": "The Executioner",
+    "mastermind": "The Mastermind",
+    "unknown": "The Unknown",
+    "trapper": "The Trapper",
+    "wraith": "The Wraith",
+    "hillbilly": "The Hillbilly",
+    "nurse": "The Nurse",
+    "shape": "The Shape",
+    "hag": "The Hag",
+    "doctor": "The Doctor",
+    "huntress": "The Huntress",
+    "cannibal": "The Cannibal",
+    "nightmare": "The Nightmare",
+    "pig": "The Pig",
+    "clown": "The Clown",
+    "spirit": "The Spirit",
+    "legion": "The Legion",
+    "plague": "The Plague",
+    "demogorgon": "The Demogorgon",
+    "oni": "The Oni",
+    "blight": "The Blight",
+    "twins": "The Twins",
+    "trickster": "The Trickster",
+    "nemesis": "The Nemesis",
+    "artist": "The Artist",
+    "onryo": "The Onryo",
+    "dredge": "The Dredge",
+    "knight": "The Knight",
+    "springtrap": "Springtrap",
+    "chucky": "Chucky",
+    "dracula": "Dracula",
+    "ghoul": "The Ghoul"
+};
+
 // 🔹 KILLERS
 const MIS_KILLERS = [
     "trapper","wraith","hillbilly","nurse","shape",
@@ -12,42 +101,6 @@ const MIS_KILLERS = [
     "dredge","mastermind","knight","springtrap",
     "chucky","dracula","unknown","ghoul"
 ];
-
-// 🔹 CAMBIAR MODO
-function cambiarModo(modo) {
-    modoActual = modo;
-    seleccionadas.clear();
-    document.getElementById('resultado').className = 'resultado-oculto';
-    cargarPerksPredefinidas(); // 👈 reutilizamos tu función original
-}
-
-// 🔹 VOLUMEN (sin romper nada)
-const volumenSlider = document.getElementById('volumenControl');
-
-if (volumenSlider) {
-    volumenSlider.addEventListener('input', (e) => {
-        const vol = e.target.value;
-        if (musicaFondo) musicaFondo.volume = vol;
-        risaAudio.volume = vol * 0.2;
-    });
-}
-
-// 🔹 AUDIO ORIGINAL
-const musicaFondo = document.getElementById('musicaFondo');
-
-function reproducirMusica() {
-    if (musicaFondo && musicaFondo.paused) {
-        musicaFondo.loop = true; // 🔁 Esto asegura que siga sonando siempre
-        musicaFondo.volume = 0.02;
-        musicaFondo.play().catch(error => {
-            console.log("Bloqueo de audio:", error);
-        });
-    }
-}
-
-const risaAudio = new Audio('risa.mp3');
-risaAudio.loop = false;
-risaAudio.volume = 0.02;
 
 // 🔹 PERKS ORIGINALES
 const MIS_PERKS = [
@@ -67,7 +120,42 @@ let listaMezclada = [];
 let seleccionadas = new Set(); 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// 🔹 SONIDOS (igual)
+// 🔹 CAMBIAR MODO
+function cambiarModo(modo) {
+    modoActual = modo;
+    seleccionadas.clear();
+    document.getElementById('resultado').className = 'resultado-oculto';
+    cargarPerksPredefinidas();
+}
+
+// 🔹 VOLUMEN
+const volumenSlider = document.getElementById('volumenControl');
+if (volumenSlider) {
+    volumenSlider.addEventListener('input', (e) => {
+        const vol = e.target.value;
+        if (musicaFondo) musicaFondo.volume = vol;
+        risaAudio.volume = vol * 0.2;
+    });
+}
+
+// 🔹 AUDIO ORIGINAL
+const musicaFondo = document.getElementById('musicaFondo');
+
+function reproducirMusica() {
+    if (musicaFondo && musicaFondo.paused) {
+        musicaFondo.loop = true; 
+        musicaFondo.volume = 0.02;
+        musicaFondo.play().catch(error => {
+            console.log("Bloqueo de audio:", error);
+        });
+    }
+}
+
+const risaAudio = new Audio('risa.mp3');
+risaAudio.loop = false;
+risaAudio.volume = 0.02;
+
+// 🔹 SONIDOS
 function playTickSound() {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
@@ -96,16 +184,16 @@ function playSuccessSound() {
     });
 }
 
-// 🔹 TU FUNCIÓN ORIGINAL (MODIFICADA SOLO AQUÍ)
+// 🔹 CARGAR PERKS PREDEFINIDAS
 function cargarPerksPredefinidas() {
     const contenedor = document.getElementById('mosaico');
     if(!contenedor) return;
 
     contenedor.innerHTML = ''; 
 
-    // 👇 SOLO ESTO CAMBIA
     const lista = modoActual === "survivor" ? MIS_PERKS : MIS_KILLERS;
     const carpeta = modoActual === "survivor" ? "perks" : "killers";
+    const diccionario = modoActual === "survivor" ? TRADUCCION_PERKS : TRADUCCION_KILLERS;
 
     listaMezclada = [...lista].sort(() => Math.random() - 0.5);
 
@@ -114,12 +202,16 @@ function cargarPerksPredefinidas() {
         div.className = 'perk-card';
         div.id = `perk-${index}`;
         div.style.backgroundImage = `url('${carpeta}/${nombre}.png')`;
-        div.dataset.nombre = nombre.replace(/([A-Z])/g, ' $1').trim();
+        
+        // Muestra el nombre bonito en el dataset (para tooltips si usas)
+        const nombreBonito = diccionario[nombre] || nombre;
+        div.dataset.nombre = nombreBonito;
+        
         contenedor.appendChild(div);
     });
 }
 
-//🔹 INICIA LA RULETA
+// 🔹 INICIA LA RULETA
 function iniciarRuletaAleatoria() {
     document.getElementById('mosaico').classList.add('ruleta-activa');
     reproducirMusica();
@@ -138,8 +230,6 @@ function iniciarRuletaAleatoria() {
 
     const inicio = Date.now();
     let ultimaCardIdx = -1;
-    
-    // 🚀 INICIO ULTRA RÁPIDO (Tu ajuste de 10)
     let retraso = 100; 
 
     function animarConTension() {
@@ -160,34 +250,26 @@ function iniciarRuletaAleatoria() {
 
         let transcurrido = Date.now() - inicio;
 
-        // 📈 FRENO PROGRESIVO
         if (transcurrido > tiempoTotalMinimo * 0.6) {
             retraso *= 1.15; 
         }
 
-        // Condición de parada para el bucle principal (cuando llega a 900ms de lentitud)
         if (transcurrido < tiempoTotalMinimo || retraso < 900) {
             setTimeout(animarConTension, retraso);
         } else {
-            // 🎭 EL TOQUE FINAL DE SUSPENSO (EL ENGAÑO)
-            // Se queda "congelado" en la penúltima carta por 1.2 segundos
             setTimeout(() => {
-                
-                // Quitamos el brillo de la carta donde parecía que iba a quedar
                 if (!seleccionadas.has(nuevoIdx)) {
                     cards[nuevoIdx].classList.remove('activa');
                 }
 
-                // Hacemos el SALTO FINAL inesperado
                 let idxFinal;
                 do { 
                     idxFinal = Math.floor(Math.random() * cards.length); 
                 } while (idxFinal === nuevoIdx);
 
                 cards[idxFinal].classList.add('activa');
-                playTickSound(); // Último sonido de confirmación
+                playTickSound();
 
-                // Pausa de medio segundo antes de procesar el resultado definitivo
                 setTimeout(() => {
                     if (seleccionadas.has(idxFinal)) {
                         seleccionadas.delete(idxFinal);
@@ -205,22 +287,27 @@ function iniciarRuletaAleatoria() {
                     btn.disabled = false;
                 }, 500);
 
-            }, 1200); // ⏱️ Duración del "engaño" antes del último salto
+            }, 1200); 
         }
     }
     animarConTension();
 }
-// 🔹 RESTO IGUAL
-function finalizarRuleta(idx) {
-    const nombre = listaMezclada[idx];
-    const carpeta = modoActual === "survivor" ? "perks" : "killers";
 
-    document.getElementById('nombreGanador').innerText = nombre.toUpperCase();
+// 🔹 FINALIZAR RULETA (Con nombres formateados)
+function finalizarRuleta(idx) {
+    const nombreOriginal = listaMezclada[idx];
+    const carpeta = modoActual === "survivor" ? "perks" : "killers";
+    const diccionario = modoActual === "survivor" ? TRADUCCION_PERKS : TRADUCCION_KILLERS;
+
+    // Buscar traducción limpia o usar la original si no existe
+    const nombreMostrar = diccionario[nombreOriginal] || nombreOriginal;
+
+    document.getElementById('nombreGanador').innerText = nombreMostrar.toUpperCase();
     document.getElementById('contenedorImagenGanadora').style.backgroundImage =
-        `url('${carpeta}/${nombre}.png')`;
+        `url('${carpeta}/${nombreOriginal}.png')`;
 
     document.getElementById('resultado').className = 'resultado-visible';
-    // 🔽 SOLO PARA KILLER
+    
     if (modoActual === "killer") {
         ruletaCantidadPerksKiller();
     }
@@ -247,7 +334,6 @@ function ruletaCantidadPerksKiller() {
     const opciones = ["0 PERKS", "1 PERK", "2 PERKS", "3 PERKS", "4 PERKS"];
     const resultadoDiv = document.getElementById('resultado');
     const nombre = document.getElementById('nombreGanador');
-    const imagen = document.getElementById('contenedorImagenGanadora');
 
     let tiempoTotal = 2000;
     let inicio = Date.now();
@@ -260,14 +346,17 @@ function ruletaCantidadPerksKiller() {
         if (Date.now() - inicio < tiempoTotal) {
             setTimeout(animar, 80);
         } else {
-            // resultado final
             nombre.innerText = opciones[idxActual];
         }
     }
 
-    // pequeño delay para que primero veas el killer
     setTimeout(() => {
         resultadoDiv.className = 'resultado-visible';
         animar();
     }, 800);
 }
+
+// 🔹 EJECUCIÓN INICIAL AL CARGAR LA PÁGINA
+window.onload = function() {
+    cargarPerksPredefinidas();
+};
